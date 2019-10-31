@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Geo Location POC</title>
+</head>
+<body>
+<!--p>Click the button to refresh your coordinates.</p-->
+
+<!--button onclick="location.reload();">Try Again</button-->
+
+<p>Latitude is: <span id="startLat"></span></p>
+<p>Longitude is:<span id="startLon"></span></p>
+<p>Accuracy in Meters is:<span id="accuracy"></span></p>
+<p>Mode is:<span id="mode"></span></p>
+<p>Time Elapsed in Milliseconds is:<span id="time"></span></p>
+<!--p>Timestamp End:<span id="timestamp"></span></p-->
+<p><span id="moving"></span></p-->
+
+
+<script>
+    window.onload = function() {
+        var startPos;
+        var geoOptions = {
+            enableHighAccuracy: false,
+            maximumAge:0
+        }
+
+        var geoSuccess = function(position) {
+            const after = Date.now();
+            //  console.log(after - before);
+
+            startPos = position;
+            document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+            document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+            document.getElementById('accuracy').innerHTML = startPos.coords.accuracy;
+            document.getElementById('mode').innerHTML = 'Low Accuracy';
+            document.getElementById('time').innerHTML = startPos.timestamp - before;
+            if(startPos.coords.speed > 0){
+                document.getElementById('time').innerHTML = 'Person is not stationary';
+            } else if(startPos.coords.speed == 0){
+                document.getElementById('time').innerHTML = 'Person is stationary';
+            }
+
+
+        };
+        var geoError = function(error) {
+            console.log('Error occurred. Error code: ' + error.code);
+            // error.code can be:
+            //   0: unknown error
+            //   1: permission denied
+            //   2: position unavailable (error response from location provider)
+            //   3: timed out
+        };
+        const before = Date.now();
+        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+    };
+</script>
+</body>
+</html>
