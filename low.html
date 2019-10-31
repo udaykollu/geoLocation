@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Geo Location POC</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151245551-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-151245551-1');
+    </script>
+
 </head>
 <body>
 <!--p>Click the button to refresh your coordinates.</p-->
@@ -18,43 +28,66 @@
 <p><span id="moving"></span></p-->
 
 
-<script>
-    window.onload = function() {
-        var startPos;
-        var geoOptions = {
-            enableHighAccuracy: false,
-            maximumAge:0
-        }
-
-        var geoSuccess = function(position) {
-            const after = Date.now();
-            //  console.log(after - before);
-
-            startPos = position;
-            document.getElementById('startLat').innerHTML = startPos.coords.latitude;
-            document.getElementById('startLon').innerHTML = startPos.coords.longitude;
-            document.getElementById('accuracy').innerHTML = startPos.coords.accuracy;
-            document.getElementById('mode').innerHTML = 'Low Accuracy';
-            document.getElementById('time').innerHTML = startPos.timestamp - before;
-            if(startPos.coords.speed > 0){
-                document.getElementById('time').innerHTML = 'Person is not stationary';
-            } else if(startPos.coords.speed == 0){
-                document.getElementById('time').innerHTML = 'Person is stationary';
+    <script>
+        window.onload = function() {
+            var startPos;
+            var geoOptions = {
+                enableHighAccuracy: false,
+                maximumAge:0
             }
 
+            var geoSuccess = function(position) {
+                const after = Date.now();
+                //  console.log(after - before);
+                startPos = position;
+                timeElapsed = startPos.timestamp - before;
+                document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+                document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+                document.getElementById('accuracy').innerHTML = startPos.coords.accuracy;
+                document.getElementById('mode').innerHTML = 'Low Accuracy';
+                document.getElementById('time').innerHTML = timeElapsed;
+                if(startPos.coords.speed > 0){
+                    document.getElementById('time').innerHTML = 'Person is not stationary';
+                } else if(startPos.coords.speed == 0){
+                    document.getElementById('time').innerHTML = 'Person is stationary';
+                }
+                /*   ga('send', {
+               hitType: 'event',
+               eventCategory: 'Success',
+               eventAction: 'Time Elapsed',
+               eventLabel: 'Low Accuracy Mode',
+               eventValue: timeElapsed
+           });*/
 
+                gtag('event', 'Time Elapsed', {
+                    'event_category': 'Success',
+                    'event_label': 'Low Accuracy Mode',
+                    'value': timeElapsed
+                });
+
+            };
+            var geoError = function(error) {
+                console.log('Error occurred. Error code: ' + error.code);
+                // error.code can be:
+                //   0: unknown error
+                //   1: permission denied
+                //   2: position unavailable (error response from location provider)
+                //   3: timed out
+                /* ga('send', {
+               hitType: 'event',
+               eventCategory: 'Error',
+               eventAction: 'Error Code',
+               eventLabel: error.code,
+           });*/
+
+                gtag('event', 'Error Code', {
+                    'event_category': 'Error',
+                    'event_label': 'error.code'
+                });
+            };
+            const before = Date.now();
+            navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
         };
-        var geoError = function(error) {
-            console.log('Error occurred. Error code: ' + error.code);
-            // error.code can be:
-            //   0: unknown error
-            //   1: permission denied
-            //   2: position unavailable (error response from location provider)
-            //   3: timed out
-        };
-        const before = Date.now();
-        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
-    };
-</script>
+    </script>
 </body>
 </html>
