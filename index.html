@@ -62,12 +62,15 @@
             const after = Date.now();
           //  console.log(after - before);
             startPos = position;
-            if(startPos.timestamp > 1000000000000)
+            /*if(startPos.timestamp > 1000000000000)
             timeElapsed = startPos.timestamp - before;
             else{
                 timeElapsed = startPos.timestamp - (before-1000000000000);
 
-            }
+            }*/
+
+
+            timeElapsed = Date.now() - before;
             document.getElementById('startLat').innerHTML = startPos.coords.latitude;
             document.getElementById('startLon').innerHTML = startPos.coords.longitude;
             //document.getElementById('accuracy').innerHTML = startPos.coords.accuracy;
