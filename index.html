@@ -65,7 +65,7 @@
             if(startPos.timestamp > 1000000000000)
             timeElapsed = startPos.timestamp - before;
             else{
-                timeElapsed = startPos.timestamp - (1000000000000-before);
+                timeElapsed = startPos.timestamp - (before-1000000000000);
 
             }
             document.getElementById('startLat').innerHTML = startPos.coords.latitude;
