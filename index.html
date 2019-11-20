@@ -27,7 +27,7 @@
 <!--p>Timestamp End:<span id="timestamp"></span></p-->
 <!--p><span id="moving"></span></p-->
 
-<p><button onclick="navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions)">Refresh</button></p>
+<p><button onclick="callLocation()">Refresh</button></p>
 <script>
 
     function inside(point, vs) {
@@ -52,7 +52,7 @@
     var polygon = [ [ 33.674961, -117.865128 ], [ 33.674528 , -117.864195 ], [ 33.677887, -117.863186 ], [ 33.677449, -117.862373 ] ];
 
     window.onload = function() {};
-        var startPos;
+        var startPos, before;
         var geoOptions = {
             enableHighAccuracy: true,
             maximumAge:0
@@ -127,11 +127,17 @@
             });
 
         };
-        const before = Date.now();
-    window.onload = function() {
 
+    callLocation =function(){
+        before = Date.now();
         navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+    }
+
+    window.onload = function() {
+        callLocation();
     };
+
+
 
 </script>
 </body>
